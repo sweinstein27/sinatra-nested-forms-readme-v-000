@@ -2,40 +2,21 @@ require_relative 'config/environment'
 
 class App < Sinatra::Base
 
-  class Student
-  attr_reader :name, :grade
-
- STUDENTS = []
-
-  def initialize(params)
-    @name = params[:name]
-    @grade = params[:grade]
-    STUDENTS << self
-  end
-
-  def self.all
-    STUDENTS
-  end
-
+  get '/' do
+  erb :new
 end
 
-class Course
-  attr_reader :name, :topic
+post '/student' do
+  @student = Student.new(params[:student])
 
-  COURSES = []
-
-  def initialize(args)
-    @name = args[:name]
-    @topic = args[:topic]
-    COURSES << self
+  params[:student][:courses].each do |details|
+    Course.new(details)
   end
 
-  def self.all
-    COURSES
-  end
+  @courses = Course.all
+
+  erb :student
 end
-
-
 
 
 end
